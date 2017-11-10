@@ -21,12 +21,14 @@ clean:
 	make -C axi_ad9265 clean
 	make -C axi_ad9361 clean
 	make -C axi_ad9371 clean
+	make -C axi_ad9379 clean
 	make -C axi_ad9434 clean
 	make -C axi_ad9467 clean
 	make -C axi_ad9625 clean
 	make -C axi_ad9671 clean
 	make -C axi_ad9680 clean
 	make -C axi_ad9684 clean
+	make -C axi_ad9694 clean
 	make -C axi_ad9739a clean
 	make -C axi_ad9963 clean
 	make -C axi_adc_decimate clean
@@ -115,12 +117,14 @@ lib:
 	make -C axi_ad9265
 	make -C axi_ad9361
 	make -C axi_ad9371
+	make -C axi_ad9379
 	make -C axi_ad9434
 	make -C axi_ad9467
 	make -C axi_ad9625
 	make -C axi_ad9671
 	make -C axi_ad9680
 	make -C axi_ad9684
+	make -C axi_ad9694
 	make -C axi_ad9739a
 	make -C axi_ad9963
 	make -C axi_adc_decimate
