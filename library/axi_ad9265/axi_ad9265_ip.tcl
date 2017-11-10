@@ -25,12 +25,10 @@ adi_ip_files axi_ad9265 [list \
   "axi_ad9265_pnmon.v" \
   "axi_ad9265_if.v" \
   "axi_ad9265_channel.v" \
-  "axi_ad9265_constr.xdc" \
   "axi_ad9265.v"]
 
 adi_ip_properties axi_ad9265
 
-set_property driver_value 0 [ipx::get_ports *dunf* -of_objects [ipx::current_core]]
 set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
 
 ipx::save_core [ipx::current_core]

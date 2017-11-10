@@ -37,8 +37,7 @@
 
 module axi_ad9625 #(
 
-  parameter ID = 0,
-  parameter IO_DELAY_GROUP = "adc_if_delay_group") (
+  parameter ID = 0) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -57,7 +56,6 @@ module axi_ad9625 #(
   output                  adc_enable,
   output      [255:0]     adc_data,
   input                   adc_dovf,
-  input                   adc_dunf,
   output      [ 15:0]     adc_sref,
   input       [  3:0]     adc_raddr_in,
   output      [  3:0]     adc_raddr_out,
@@ -190,7 +188,6 @@ module axi_ad9625 #(
     .adc_status (adc_status_s),
     .adc_sync_status (1'd0),
     .adc_status_ovf (adc_dovf),
-    .adc_status_unf (adc_dunf),
     .adc_clk_ratio (32'd16),
     .adc_start_code (),
     .adc_sync (),
