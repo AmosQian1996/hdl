@@ -74,6 +74,9 @@ module axi_adc_jesd204 #(
   // Assumes 2 octets per sample.
   localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
 
+  // Define octet per sample for data mapping
+  localparam OCT_PER_SAMPLE = (CHANNEL_WIDTH > 8) ? 2 : 1;
+
   // internal clocks & resets
 
   wire up_clk;
@@ -106,7 +109,8 @@ module axi_adc_jesd204 #(
   axi_adc_jesd204_if #(
     .NUM_LANES(NUM_LANES),
     .NUM_CHANNELS(NUM_CHANNELS),
-    .CHANNEL_WIDTH(CHANNEL_WIDTH)
+    .CHANNEL_WIDTH(CHANNEL_WIDTH),
+    .OCT_PER_SAMPLE(OCT_PER_SAMPLE)
   ) i_if (
     .rx_clk (rx_clk),
     .rx_sof (rx_sof),

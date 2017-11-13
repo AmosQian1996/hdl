@@ -25,7 +25,8 @@
 
 module axi_dac_jesd204_if #(
   parameter NUM_LANES = 8,
-  parameter NUM_CHANNELS = 4
+  parameter NUM_CHANNELS = 4,
+  parameter OCT_PER_SAMPLE = 2
 ) (
   // jesd interface
   // tx_clk is (line-rate/40)
@@ -39,7 +40,7 @@ module axi_dac_jesd204_if #(
   input   [NUM_LANES*32-1:0]  dac_data
 );
 
-  localparam DATA_PATH_WIDTH = 2 * NUM_LANES / NUM_CHANNELS;
+  localparam DATA_PATH_WIDTH = (4/OCT_PER_SAMPLE) * NUM_LANES / NUM_CHANNELS;
   localparam H = NUM_LANES / NUM_CHANNELS / 2;
   localparam HD = NUM_LANES > NUM_CHANNELS ? 1 : 0;
   localparam OCT_OFFSET = HD ? 32 : 8;
@@ -62,15 +63,26 @@ module axi_dac_jesd204_if #(
   generate
   genvar i;
   genvar j;
-  for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_framer_outer
-    for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin: g_framer_inner
-      localparam k = j + i * DATA_PATH_WIDTH;
-      localparam dac_lsb = k * 16;
-      localparam oct0_lsb = HD ? ((i * H + j % H) * 64 + (j / H) * 8) : (k * 16);
-      localparam oct1_lsb = oct0_lsb + OCT_OFFSET;
+  if (OCT_PER_SAMPLE == 2) begin
+    for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_framer_outer
+      for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin: g_framer_inner
+        localparam k = j + i * DATA_PATH_WIDTH;
+        localparam dac_lsb = k * 16;
+        localparam oct0_lsb = HD ? ((i * H + j % H) * 64 + (j / H) * 8) : (k * 16);
+        localparam oct1_lsb = oct0_lsb + OCT_OFFSET;
 
-      assign tx_data_s[oct0_lsb+:8] = dac_data[dac_lsb+8+:8];
-      assign tx_data_s[oct1_lsb+:8] = dac_data[dac_lsb+:8];
+        assign tx_data_s[oct0_lsb+:8] = dac_data[dac_lsb+8+:8];
+        assign tx_data_s[oct1_lsb+:8] = dac_data[dac_lsb+:8];
+      end
+    end
+  end else begin // OCT_PER_SAMPLE == 1
+    for (i = 0; i < NUM_CHANNELS; i = i + 1) begin: g_framer_outer
+      for (j = 0; j < DATA_PATH_WIDTH; j = j + 1) begin: g_framer_inner
+        localparam k = j + i * DATA_PATH_WIDTH;
+        localparam smp_lsb = k * 8;
+
+        assign tx_data_s[smp_lsb+:8] = dac_data[smp_lsb+:8];
+      end
     end
   end
   endgenerate
