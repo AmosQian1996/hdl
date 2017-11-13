@@ -28,6 +28,7 @@ module axi_adc_jesd204_core #(
   parameter NUM_CHANNELS = 1,
   parameter CHANNEL_WIDTH = 14,
   parameter DATA_PATH_WIDTH = 4,
+  parameter OCT_PER_SAMPLE = 2,
   parameter TWOS_COMPLEMENT = 1
 ) (
   input                                                         adc_clk,
@@ -36,7 +37,7 @@ module axi_adc_jesd204_core #(
 
   output     [NUM_CHANNELS-1:0]                                 adc_enable,
   output     [NUM_CHANNELS-1:0]                                 adc_valid,
-  output     [DATA_PATH_WIDTH*NUM_CHANNELS*16-1:0]              adc_data,
+  output     [DATA_PATH_WIDTH*NUM_CHANNELS*8*OCT_PER_SAMPLE-1:0]  adc_data,
   input                                                         adc_dovf,
 
 
@@ -114,7 +115,7 @@ module axi_adc_jesd204_core #(
   // channel
 
   localparam CDW = CHANNEL_WIDTH * DATA_PATH_WIDTH;
-  localparam CDW2 = 16 * DATA_PATH_WIDTH;
+  localparam CDW2 = 8 * OCT_PER_SAMPLE * DATA_PATH_WIDTH;
 
   generate
   genvar i;
@@ -123,6 +124,7 @@ module axi_adc_jesd204_core #(
       .CHANNEL_ID(i),
       .CHANNEL_WIDTH(CHANNEL_WIDTH),
       .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
+      .OCT_PER_SAMPLE(OCT_PER_SAMPLE),
       .TWOS_COMPLEMENT(TWOS_COMPLEMENT)
     ) i_channel (
       .adc_clk (adc_clk),

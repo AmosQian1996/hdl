@@ -27,6 +27,7 @@ module axi_adc_jesd204_channel #(
   parameter CHANNEL_ID = 0,
   parameter CHANNEL_WIDTH = 14,
   parameter DATA_PATH_WIDTH = 2,
+  parameter OCT_PER_SAMPLE = 2,
   parameter TWOS_COMPLEMENT = 1
 ) (
   // adc interface
@@ -37,7 +38,7 @@ module axi_adc_jesd204_channel #(
 
   // channel interface
 
-  output     [16*DATA_PATH_WIDTH-1:0]             adc_dfmt_data,
+  output     [8*OCT_PER_SAMPLE*DATA_PATH_WIDTH-1:0]  adc_dfmt_data,
   output                                          adc_enable,
   output                                          up_adc_pn_err,
   output                                          up_adc_pn_oos,
@@ -82,13 +83,14 @@ module axi_adc_jesd204_channel #(
   genvar n;
   for (n = 0; n < DATA_PATH_WIDTH; n = n + 1) begin: g_ad_datafmt_1
     ad_datafmt #(
-      .DATA_WIDTH(CHANNEL_WIDTH)
+      .DATA_WIDTH(CHANNEL_WIDTH),
+      .OCT_PER_SAMPLE(OCT_PER_SAMPLE)
     ) i_ad_datafmt (
       .clk (adc_clk),
       .valid (1'b1),
       .data (adc_data[n*CHANNEL_WIDTH+:CHANNEL_WIDTH]),
       .valid_out (),
-      .data_out (adc_dfmt_data[n*16+:16]),
+      .data_out (adc_dfmt_data[n*(8*OCT_PER_SAMPLE)+:(8*OCT_PER_SAMPLE)]),
       .dfmt_enable (adc_dfmt_enable_s),
       .dfmt_type (adc_dfmt_type_s),
       .dfmt_se (adc_dfmt_se_s)
@@ -122,8 +124,8 @@ module axi_adc_jesd204_channel #(
     .adc_usr_datatype_be (1'b0),
     .adc_usr_datatype_signed (1'b1),
     .adc_usr_datatype_shift (8'd0),
-    .adc_usr_datatype_total_bits (8'd16),
-    .adc_usr_datatype_bits (8'd16),
+    .adc_usr_datatype_total_bits (8*OCT_PER_SAMPLE),
+    .adc_usr_datatype_bits (8*OCT_PER_SAMPLE),
     .adc_usr_decimation_m (16'd1),
     .adc_usr_decimation_n (16'd1),
 
