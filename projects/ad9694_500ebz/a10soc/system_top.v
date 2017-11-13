@@ -125,7 +125,15 @@ module system_top (
   output            spi_csn_adc,
   output            spi_clk,
   output            spi_sdi,
-  input             spi_sdo);
+  input             spi_sdo,
+
+  // spi mirror on fmcb + fmc_breakout
+
+  output            spi_fmcbk_csn_clk,
+  output            spi_fmcbk_csn_adc,
+  output            spi_fmcbk_clk,
+  output            spi_fmcbk_sdi,
+  input             spi_fmcbk_sdo);
 
   // internal signals
 
@@ -133,6 +141,7 @@ module system_top (
   wire              sys_resetn_s;
   wire    [ 63:0]   gpio_i;
   wire    [ 63:0]   gpio_o;
+  wire              spi_clk_s;
   wire              spi_miso_s;
   wire              spi_mosi_s;
   wire    [  7:0]   spi_csn_s;
@@ -145,10 +154,18 @@ module system_top (
 
   // spi
 
+  assign spi_clk = spi_clk_s;
   assign spi_csn_adc = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
   assign spi_sdi = spi_mosi_s;
-  assign spi_miso_s = spi_sdo;
+  assign spi_miso_s = spi_sdo | spi_fmcbk_sdo;
+
+  // spi mirror
+
+  assign spi_fmcbk_clk = spi_clk_s;
+  assign spi_fmcbk_csn_adc = spi_csn_s[1];
+  assign spi_fmcbk_csn_clk = spi_csn_s[0];
+  assign spi_fmcbk_sdi = spi_mosi_s;
 
   // gpio in & out are separate cores
 
@@ -244,7 +261,7 @@ module system_top (
     .sys_rstn_reset_n (sys_resetn_s),
     .sys_spi_MISO (spi_miso_s),
     .sys_spi_MOSI (spi_mosi_s),
-    .sys_spi_SCLK (spi_clk),
+    .sys_spi_SCLK (spi_clk_s),
     .sys_spi_SS_n (spi_csn_s),
     .rx_serial_data_rx_serial_data (rx_serial_data),
     .rx_ref_clk_clk (rx_ref_clk),

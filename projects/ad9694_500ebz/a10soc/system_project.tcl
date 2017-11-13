@@ -65,13 +65,27 @@ set_location_assignment PIN_E12  -to spi_clk               ; ## D08 FMCA_HPC_LA0
 set_location_assignment PIN_C13  -to spi_sdo               ; ## H07 FMCA_HPC_LA02_P
 set_location_assignment PIN_E13  -to spi_sdi               ; ## D09 FMCA_HPC_LA01_CC_N
 set_location_assignment PIN_A10  -to spi_csn_adc           ; ## C10 FMCA_HPC_LA06_P
-set_location_assignment PIN_D13  -to spi_csn_clk           ; ## H08 FMCA_HPC_LA02_N
+set_location_assignment PIN_D13  -to spi_csn_clk           ; ## H08 FMCA_HPC_LA02_N -- PWDN_TO_FPGA
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_csn_adc
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_csn_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_clk
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_sdi
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_sdo
+
+# spi mirror to fmc_breakout
+
+set_location_assignment PIN_AK13  -to spi_fmcbk_sdo        ; ## C22 FMCB_HPC_LA18_CC_P
+set_location_assignment PIN_AH13  -to spi_fmcbk_sdi        ; ## D21 FMCB_HPC_LA17_CC_N
+set_location_assignment PIN_V1    -to spi_fmcbk_clk        ; ## D23 FMCB_HPC_LA23_P
+set_location_assignment PIN_AH12  -to spi_fmcbk_csn_adc    ; ## D20 FMCB_HPC_LA17_CC_P
+set_location_assignment PIN_AG14  -to spi_fmcbk_csn_clk    ; ## H22 FMCB_HPC_LA19_P -- PWDN_TO_FPGA
+
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_csn_adc
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_csn_clk
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_clk
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_sdi
+set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_sdo
 
 execute_flow -compile
 
