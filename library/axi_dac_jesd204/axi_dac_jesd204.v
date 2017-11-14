@@ -81,7 +81,7 @@ module axi_dac_jesd204 #(
 
   // internal signals
 
-  wire    [NUM_LANES*32-1:0]   dac_data_s;
+  wire    [NUM_LANES*(4/OCT_PER_SAMPLE)*CHANNEL_WIDTH-1:0]   dac_data_s;
 
   wire                         up_wreq_s;
   wire    [ 13:0]              up_waddr_s;
@@ -119,7 +119,8 @@ module axi_dac_jesd204 #(
   axi_dac_jesd204_core #(
     .ID (ID),
     .NUM_CHANNELS(NUM_CHANNELS),
-    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE)
+    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE),
+    .OCT_PER_SAMPLE(OCT_PER_SAMPLE)
   ) i_core (
     .dac_clk (tx_clk),
     .dac_rst (dac_rst),

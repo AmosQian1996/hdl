@@ -26,15 +26,16 @@
 module axi_dac_jesd204_channel #(
   parameter CHANNEL_ID = 0,
   parameter DATAPATH_DISABLE = 0,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter OCT_PER_SAMPLE = 2
 ) (
   // dac interface
 
   input                                 dac_clk,
   input                                 dac_rst,
   output reg                            dac_enable,
-  output reg  [DATA_PATH_WIDTH*16-1:0]  dac_data,
-  input       [DATA_PATH_WIDTH*16-1:0]  dma_data,
+  output reg  [DATA_PATH_WIDTH*8*OCT_PER_SAMPLE-1:0]  dac_data,
+  input       [DATA_PATH_WIDTH*8*OCT_PER_SAMPLE-1:0]  dma_data,
 
   // processor interface
 
@@ -55,7 +56,7 @@ module axi_dac_jesd204_channel #(
   output                                up_rack
 );
 
-  localparam DW = DATA_PATH_WIDTH * 16 - 1;
+  localparam DW = DATA_PATH_WIDTH * 8 * OCT_PER_SAMPLE - 1;
 
   // internal registers
 
@@ -98,11 +99,11 @@ module axi_dac_jesd204_channel #(
   generate
   genvar i;
   for (i = 0; i < DATA_PATH_WIDTH; i = i + 1) begin: g_pn_swizzle
-    localparam src_lsb = i * 16;
-    localparam dst_lsb = (DATA_PATH_WIDTH - i - 1) * 16;
+    localparam src_lsb = i * 8 * OCT_PER_SAMPLE;
+    localparam dst_lsb = (DATA_PATH_WIDTH - i - 1) * 8 * OCT_PER_SAMPLE;
 
-    assign dac_pn15_data_s[dst_lsb+:16] = dac_pn15_data[src_lsb+:16];
-    assign dac_pn7_data_s[dst_lsb+:16] = dac_pn7_data[src_lsb+:16];
+    assign dac_pn15_data_s[dst_lsb+:(8 * OCT_PER_SAMPLE)] = dac_pn15_data[src_lsb+:(8 * OCT_PER_SAMPLE)];
+    assign dac_pn7_data_s[dst_lsb+:(8 * OCT_PER_SAMPLE)] = dac_pn7_data[src_lsb+:(8 * OCT_PER_SAMPLE)];
   end
   endgenerate
 
@@ -143,6 +144,7 @@ module axi_dac_jesd204_channel #(
     end
   end else begin
     genvar i;
+    wire   [15:0]     dac_dds_data_out_s[0:DATA_PATH_WIDTH-1];
 
     always @(posedge dac_clk) begin
       if (dac_data_sync == 1'b1) begin
@@ -180,8 +182,10 @@ module axi_dac_jesd204_channel #(
         .dds_scale_0 (dac_dds_scale_1_s),
         .dds_phase_1 (dac_dds_phase_1[i]),
         .dds_scale_1 (dac_dds_scale_2_s),
-        .dds_data (dac_dds_data_s[16*i+:16])
+        .dds_data (dac_dds_data_out_s[i])
       );
+
+      assign dac_dds_data_s[(8*OCT_PER_SAMPLE)*i+:(8*OCT_PER_SAMPLE)] = dac_dds_data_out_s[i][(8*(OCT_PER_SAMPLE-1))+:(8*OCT_PER_SAMPLE)];
     end
   end
   endgenerate

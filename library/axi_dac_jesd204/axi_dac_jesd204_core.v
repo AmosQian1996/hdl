@@ -27,19 +27,20 @@ module axi_dac_jesd204_core #(
   parameter ID = 0,
   parameter DATAPATH_DISABLE = 0,
   parameter NUM_CHANNELS = 1,
-  parameter DATA_PATH_WIDTH = 4
+  parameter DATA_PATH_WIDTH = 4,
+  parameter OCT_PER_SAMPLE = 2
 ) (
   // dac interface
 
   input                                          dac_clk,
   output                                         dac_rst,
-  output  [DATA_PATH_WIDTH*NUM_CHANNELS*16-1:0]  dac_data,
+  output  [DATA_PATH_WIDTH*NUM_CHANNELS*8*OCT_PER_SAMPLE-1:0]  dac_data,
 
   // dma interface
 
   output  [NUM_CHANNELS-1:0]                     dac_valid,
   output  [NUM_CHANNELS-1:0]                     dac_enable,
-  input   [DATA_PATH_WIDTH*NUM_CHANNELS*16-1:0]  dac_ddata,
+  input   [DATA_PATH_WIDTH*NUM_CHANNELS*8*OCT_PER_SAMPLE-1:0]  dac_ddata,
   input                                          dac_dunf,
 
   // processor interface
@@ -97,7 +98,7 @@ module axi_dac_jesd204_core #(
 
   // dac channel
 
-  localparam CDW = 16 * DATA_PATH_WIDTH;
+  localparam CDW = 8 * OCT_PER_SAMPLE * DATA_PATH_WIDTH;
 
   generate
   genvar i;
@@ -105,7 +106,8 @@ module axi_dac_jesd204_core #(
     axi_dac_jesd204_channel #(
       .CHANNEL_ID(i),
       .DATA_PATH_WIDTH(DATA_PATH_WIDTH),
-      .DATAPATH_DISABLE(DATAPATH_DISABLE)
+      .DATAPATH_DISABLE(DATAPATH_DISABLE),
+      .OCT_PER_SAMPLE(OCT_PER_SAMPLE)
     ) i_channel (
       .dac_clk (dac_clk),
       .dac_rst (dac_rst),
