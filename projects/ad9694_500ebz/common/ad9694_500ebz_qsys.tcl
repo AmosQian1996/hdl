@@ -4,6 +4,7 @@
 set NUM_OF_CHANNELS 2
 set NUM_OF_LANES 2
 set SAMPLE_RATE_MHZ 1000.0
+set SAMPLE_RESOLUTION 8
 
 # Auto-computed parameters
 
@@ -34,8 +35,11 @@ set_interface_property rx_sync EXPORT_OF ad9694_jesd204.sync
 
 # ad9694
 
-add_instance axi_ad9694_core axi_ad9694
-set_instance_parameter_value axi_ad9694_core {CHANNEL_WIDTH} {8}
+add_instance axi_ad9694_core axi_adc_jesd204
+set_instance_parameter_value axi_ad9694_core {NUM_CHANNELS} $NUM_OF_CHANNELS
+set_instance_parameter_value axi_ad9694_core {CHANNEL_WIDTH} $SAMPLE_RESOLUTION
+set_instance_parameter_value axi_ad9694_core {NUM_LANES} $NUM_OF_LANES
+set_instance_parameter_value axi_ad9694_core {TWOS_COMPLEMENT} {0}
 
 add_connection ad9694_jesd204.link_clk axi_ad9694_core.if_rx_clk
 add_connection ad9694_jesd204.link_sof axi_ad9694_core.if_rx_sof
@@ -57,7 +61,7 @@ add_connection axi_ad9694_core.adc_ch_1 util_ad9694_cpack.adc_ch_1
 # ad9694-fifo
 
 add_instance ad9694_adcfifo util_adcfifo
-set_instance_parameter_value ad9694_adcfifo {ADC_DATA_WIDTH} [expr $CHANNEL_DATA_WIDTH * $NUM_CHANNELS]
+set_instance_parameter_value ad9694_adcfifo {ADC_DATA_WIDTH} [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
 set_instance_parameter_value ad9694_adcfifo {DMA_DATA_WIDTH} {128}
 set_instance_parameter_value ad9694_adcfifo {DMA_ADDRESS_WIDTH} {16}
 
