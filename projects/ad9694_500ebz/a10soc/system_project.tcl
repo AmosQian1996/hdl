@@ -24,8 +24,11 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 #  R621: R0 -> DNI
 #  R633: R0 -> DNI
 
-set_location_assignment PIN_N29   -to rx_ref_clk            ; ## D04 FMCA_HPC_GBTCLK0_M2C_P
-set_location_assignment PIN_N28   -to "rx_ref_clk(n)"       ; ## D05 FMCA_HPC_GBTCLK0_M2C_N
+#set_location_assignment PIN_N29   -to rx_ref_clk            ; ## D04 FMCA_HPC_GBTCLK0_M2C_P
+#set_location_assignment PIN_N28   -to "rx_ref_clk(n)"       ; ## D05 FMCA_HPC_GBTCLK0_M2C_N
+
+set_location_assignment PIN_J29   -to rx_ref_clk            ; ## REFCLK_GXBL1I_CHTP
+set_location_assignment PIN_J28   -to "rx_ref_clk(n)"       ; ## REFCLK_GXBL1I_CHTN
 
 set_location_assignment PIN_M35   -to rx_serial_data[0]     ; ## A18 FMCA_HPC_DP05_M2C_P
 set_location_assignment PIN_M34   -to "rx_serial_data[0](n)"; ## A19 FMCA_HPC_DP05_M2C_N
