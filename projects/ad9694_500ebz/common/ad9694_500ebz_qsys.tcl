@@ -4,7 +4,7 @@ add_instance ad9694_jesd204 adi_jesd204
 set_instance_parameter_value ad9694_jesd204 {ID} {1}
 set_instance_parameter_value ad9694_jesd204 {TX_OR_RX_N} {0}
 set_instance_parameter_value ad9694_jesd204 {LANE_RATE} {10000.0}
-set_instance_parameter_value ad9694_jesd204 {REFCLK_FREQUENCY} {333.333333}
+set_instance_parameter_value ad9694_jesd204 {REFCLK_FREQUENCY} {250.0}
 set_instance_parameter_value ad9694_jesd204 {NUM_OF_LANES} {4}
 set_instance_parameter_value ad9694_jesd204 {SOFT_PCS} {true}
 
