@@ -6,6 +6,8 @@ adi_project_altera ad9694_500ebz_a10soc
 
 source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 
+set NUM_LANES 4
+
 # files
 
 # lane interface
@@ -30,14 +32,23 @@ source $ad_hdl_dir/projects/common/a10soc/a10soc_system_assign.tcl
 set_location_assignment PIN_J29   -to rx_ref_clk            ; ## REFCLK_GXBL1I_CHTP
 set_location_assignment PIN_J28   -to "rx_ref_clk(n)"       ; ## REFCLK_GXBL1I_CHTN
 
-set_location_assignment PIN_M35   -to rx_serial_data[0]     ; ## A18 FMCA_HPC_DP05_M2C_P
-set_location_assignment PIN_M34   -to "rx_serial_data[0](n)"; ## A19 FMCA_HPC_DP05_M2C_N
-set_location_assignment PIN_M31   -to rx_serial_data[1]     ; ## B16 FMCA_HPC_DP06_M2C_P
-set_location_assignment PIN_M30   -to "rx_serial_data[1](n)"; ## B17 FMCA_HPC_DP06_M2C_N
-set_location_assignment PIN_T31   -to rx_serial_data[2]     ; ## C06 FMCA_HPC_DP00_M2C_P
-set_location_assignment PIN_T30   -to "rx_serial_data[2](n)"; ## C07 FMCA_HPC_DP00_M2C_N
-set_location_assignment PIN_R33   -to rx_serial_data[3]     ; ## A02 FMCA_HPC_DP1_M2C_P
-set_location_assignment PIN_R32   -to "rx_serial_data[3](n)"; ## A03 FMCA_HPC_DP1_M2C_N
+## A18 FMCA_HPC_DP05_M2C_P / A19 FMCA_HPC_DP05_M2C_N
+## B16 FMCA_HPC_DP06_M2C_P / B17 FMCA_HPC_DP06_M2C_N
+## C06 FMCA_HPC_DP00_M2C_P / C07 FMCA_HPC_DP00_M2C_N
+## A02 FMCA_HPC_DP01_M2C_P / A03 FMCA_HPC_DP01_M2C_N
+set rx_loc {
+  {PIN_M35 PIN_M34}
+  {PIN_M31 PIN_M30}
+  {PIN_T31 PIN_T30}
+  {PIN_R33 PIN_R32}
+}
+
+for {set i 0} {$i < $NUM_LANES} {incr i} {
+  lassign [lindex $rx_loc $i] pin_p pin_n
+  set_location_assignment $pin_p -to "rx_serial_data[${i}]"
+  set_location_assignment $pin_n -to "rx_serial_data[${i}](n)";
+}
+
 set_location_assignment PIN_H12   -to rx_sync_0             ; ## H13 FMCA_HPC_LA07_P
 set_location_assignment PIN_H13   -to "rx_sync_0(n)"        ; ## H14 FMCA_HPC_LA07_N
 set_location_assignment PIN_A9    -to rx_sync_1             ; ## H10 FMCA_HPC_LA04_P

@@ -35,7 +35,9 @@
 
 `timescale 1ns/100ps
 
-module system_top (
+module system_top #(
+  parameter NUM_LANES = 4
+) (
 
   // clock and resets
 
@@ -109,10 +111,10 @@ module system_top (
 
   // lane interface
 
-  input             rx_ref_clk,
-  input   [ 3:0]    rx_serial_data,
-  output            rx_sync_0,
-  output            rx_sync_1,
+  input                   rx_ref_clk,
+  input   [NUM_LANES-1:0] rx_serial_data,
+  output                  rx_sync_0,
+  output                  rx_sync_1,
 
   // gpio
 
