@@ -71,11 +71,11 @@ ad_alt_intf clock   rx_clk        input   1
 ad_alt_intf signal  rx_sof        input   4 export
 
 add_interface if_rx_data avalon_streaming sink
-add_interface_port if_rx_data rx_data  data  input 128
+add_interface_port if_rx_data rx_data  data  input 64
 add_interface_port if_rx_data rx_valid valid input 1
 add_interface_port if_rx_data rx_ready ready output 1
 set_interface_property if_rx_data associatedClock if_rx_clk
-set_interface_property if_rx_data dataBitsPerSymbol 128
+set_interface_property if_rx_data dataBitsPerSymbol 64
 
 # dma interface
 
@@ -84,7 +84,7 @@ ad_alt_intf clock   adc_clk     output  1
 add_interface adc_ch_0 conduit end
 add_interface_port adc_ch_0  adc_enable_0  enable   Output  1
 add_interface_port adc_ch_0  adc_valid_0   valid    Output  1
-add_interface_port adc_ch_0  adc_data_0    data     Output  64
+add_interface_port adc_ch_0  adc_data_0    data     Output  32
 
 set_interface_property adc_ch_0 associatedClock if_rx_clk
 set_interface_property adc_ch_0 associatedReset none
@@ -92,7 +92,7 @@ set_interface_property adc_ch_0 associatedReset none
 add_interface adc_ch_1 conduit end
 add_interface_port adc_ch_1  adc_enable_1  enable   Output  1
 add_interface_port adc_ch_1  adc_valid_1   valid    Output  1
-add_interface_port adc_ch_1  adc_data_1    data     Output  64
+add_interface_port adc_ch_1  adc_data_1    data     Output  32
 
 set_interface_property adc_ch_1 associatedClock if_rx_clk
 set_interface_property adc_ch_1 associatedReset none

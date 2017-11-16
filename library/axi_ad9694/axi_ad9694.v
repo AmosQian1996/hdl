@@ -38,8 +38,8 @@
 module axi_ad9694 #(
 
   parameter ID = 0,
-  parameter CHANNEL_WIDTH = 14,
-  parameter NUM_OF_LANES = 4) (
+  parameter CHANNEL_WIDTH = 14
+) (
 
   // jesd interface
   // rx_clk is (line-rate/40)
@@ -47,7 +47,7 @@ module axi_ad9694 #(
   input                   rx_clk,
   input       [ 3:0]      rx_sof,
   input                   rx_valid,
-  input       [127:0]     rx_data,
+  input       [63:0]      rx_data,
   output                  rx_ready,
 
   // dma interface
@@ -55,10 +55,10 @@ module axi_ad9694 #(
   output                  adc_clk,
   output                  adc_enable_0,
   output                  adc_valid_0,
-  output      [63:0]      adc_data_0,
+  output      [31:0]      adc_data_0,
   output                  adc_enable_1,
   output                  adc_valid_1,
-  output      [63:0]      adc_data_1,
+  output      [31:0]      adc_data_1,
   input                   adc_dovf,
 
   // axi interface
@@ -92,7 +92,7 @@ module axi_ad9694 #(
     .ID(ID),
     .NUM_CHANNELS(2),
     .CHANNEL_WIDTH(CHANNEL_WIDTH),
-    .NUM_LANES(NUM_OF_LANES),
+    .NUM_LANES(2),
     .TWOS_COMPLEMENT(1)
   ) i_adc_jesd204 (
     .rx_clk(rx_clk),

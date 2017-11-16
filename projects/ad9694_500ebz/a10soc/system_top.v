@@ -36,7 +36,7 @@
 `timescale 1ns/100ps
 
 module system_top #(
-  parameter NUM_LANES = 4
+  parameter NUM_LANES = 2
 ) (
 
   // clock and resets

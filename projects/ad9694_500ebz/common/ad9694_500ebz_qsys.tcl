@@ -2,7 +2,7 @@
 # Configurable parameters
 
 set NUM_OF_CHANNELS 2
-set NUM_OF_LANES 4
+set NUM_OF_LANES 2
 set SAMPLE_RATE_MHZ 1000.0
 
 # Auto-computed parameters
@@ -36,7 +36,6 @@ set_interface_property rx_sync EXPORT_OF ad9694_jesd204.sync
 
 add_instance axi_ad9694_core axi_ad9694
 set_instance_parameter_value axi_ad9694_core {CHANNEL_WIDTH} {8}
-set_instance_parameter_value axi_ad9694_core {NUM_OF_LANES} $NUM_OF_LANES
 
 add_connection ad9694_jesd204.link_clk axi_ad9694_core.if_rx_clk
 add_connection ad9694_jesd204.link_sof axi_ad9694_core.if_rx_sof
