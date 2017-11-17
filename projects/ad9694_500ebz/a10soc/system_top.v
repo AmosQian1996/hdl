@@ -131,8 +131,7 @@ module system_top #(
 
   // spi mirror on fmcb + fmc_breakout
 
-  output            spi_fmcbk_csn_clk,
-  output            spi_fmcbk_csn_adc,
+  output            spi_fmcbk_csn,
   output            spi_fmcbk_clk,
   output            spi_fmcbk_sdi,
   input             spi_fmcbk_sdo);
@@ -165,8 +164,7 @@ module system_top #(
   // spi mirror
 
   assign spi_fmcbk_clk = spi_clk_s;
-  assign spi_fmcbk_csn_adc = spi_csn_s[1];
-  assign spi_fmcbk_csn_clk = spi_csn_s[0];
+  assign spi_fmcbk_csn = spi_csn_s[0];
   assign spi_fmcbk_sdi = spi_mosi_s;
 
   // gpio in & out are separate cores
