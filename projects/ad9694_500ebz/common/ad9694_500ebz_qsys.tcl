@@ -95,20 +95,13 @@ add_connection sys_clk.clk axi_ad9694_dma.s_axi_clock
 add_connection sys_dma_clk.clk_reset axi_ad9694_dma.m_dest_axi_reset
 add_connection sys_dma_clk.clk axi_ad9694_dma.m_dest_axi_clock
 
-for {set i 0} {$i < $NUM_OF_LANES} {incr i} {
-  add_instance avl_adxcfg_${i} avl_adxcfg
-  add_connection sys_clk.clk avl_adxcfg_${i}.rcfg_clk
-  add_connection sys_clk.clk_reset avl_adxcfg_${i}.rcfg_reset_n
-  add_connection avl_adxcfg_${i}.rcfg_m0 ad9694_jesd204.phy_reconfig_${i}
-}
-
 # addresses
 
 ad_cpu_interconnect 0x00040000 ad9694_jesd204.link_reconfig
 ad_cpu_interconnect 0x00044000 ad9694_jesd204.link_management
 ad_cpu_interconnect 0x00045000 ad9694_jesd204.link_pll_reconfig
 for {set i 0} {$i < $NUM_OF_LANES} {incr i} {
-  ad_cpu_interconnect [expr 0x00048000 + $i * 0x1000] avl_adxcfg_${i}.rcfg_s0
+  ad_cpu_interconnect [expr 0x00048000 + $i * 0x1000] ad9694_jesd204.phy_reconfig_${i}
 }
 ad_cpu_interconnect 0x0004c000 axi_ad9694_dma.s_axi
 ad_cpu_interconnect 0x00050000 axi_ad9694_core.s_axi
