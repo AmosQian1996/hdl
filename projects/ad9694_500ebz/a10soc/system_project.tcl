@@ -90,9 +90,9 @@ set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_sdo
 # spi mirror to fmc_breakout
 
 set_location_assignment PIN_AH12  -to spi_fmcbk_clk        ; ## D20 FMCB_HPC_LA17_CC_P
-set_location_assignment PIN_AH13  -to spi_fmcbk_sdo        ; ## D21 FMCB_HPC_LA17_CC_N
-set_location_assignment PIN_AK13  -to spi_fmcbk_sdi        ; ## C22 FMCB_HPC_LA18_CC_P
-set_location_assignment PIN_AJ13  -to spi_fmcbk_csn        ; ## C23 FMCB_HPC_LA18_CC_N
+set_location_assignment PIN_AH13  -to spi_fmcbk_sdi        ; ## D21 FMCB_HPC_LA17_CC_N
+set_location_assignment PIN_AK13  -to spi_fmcbk_csn        ; ## C22 FMCB_HPC_LA18_CC_P
+set_location_assignment PIN_AJ13  -to spi_fmcbk_sdo        ; ## C23 FMCB_HPC_LA18_CC_N
 
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_csn_adc
 set_instance_assignment -name IO_STANDARD "1.8 V" -to spi_fmckb_csn_clk
