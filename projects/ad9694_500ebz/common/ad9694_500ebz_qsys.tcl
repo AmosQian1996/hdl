@@ -11,6 +11,8 @@ set SAMPLE_RESOLUTION 8
 set LANE_RATE_MHZ [expr $SAMPLE_RATE_MHZ * $NUM_OF_CHANNELS / $NUM_OF_LANES * 10]
 set REFCLK_FREQUENCY_MHZ [expr $LANE_RATE_MHZ / 40]
 set CHANNEL_DATA_WIDTH [expr 32 * $NUM_OF_LANES / $NUM_OF_CHANNELS]
+set ADC_DATA_WIDTH [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
+set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH < 128 ? $ADC_DATA_WIDTH : 128]
 
 # ad9694-xcvr
 
@@ -61,8 +63,8 @@ add_connection axi_ad9694_core.adc_ch_1 util_ad9694_cpack.adc_ch_1
 # ad9694-fifo
 
 add_instance ad9694_adcfifo util_adcfifo
-set_instance_parameter_value ad9694_adcfifo {ADC_DATA_WIDTH} [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
-set_instance_parameter_value ad9694_adcfifo {DMA_DATA_WIDTH} {128}
+set_instance_parameter_value ad9694_adcfifo {ADC_DATA_WIDTH} $ADC_DATA_WIDTH
+set_instance_parameter_value ad9694_adcfifo {DMA_DATA_WIDTH} $DMA_DATA_WIDTH
 set_instance_parameter_value ad9694_adcfifo {DMA_ADDRESS_WIDTH} {16}
 
 add_connection sys_clk.clk_reset ad9694_adcfifo.if_adc_rst
@@ -75,7 +77,7 @@ add_connection sys_dma_clk.clk_reset ad9694_adcfifo.if_adc_rst
 # ad9694-dma
 
 add_instance axi_ad9694_dma axi_dmac
-set_instance_parameter_value axi_ad9694_dma {DMA_DATA_WIDTH_SRC} {128}
+set_instance_parameter_value axi_ad9694_dma {DMA_DATA_WIDTH_SRC} $DMA_DATA_WIDTH
 set_instance_parameter_value axi_ad9694_dma {DMA_DATA_WIDTH_DEST} {128}
 set_instance_parameter_value axi_ad9694_dma {DMA_LENGTH_WIDTH} {24}
 set_instance_parameter_value axi_ad9694_dma {DMA_2D_TRANSFER} {0}
