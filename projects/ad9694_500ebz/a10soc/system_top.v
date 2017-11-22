@@ -159,7 +159,7 @@ module system_top #(
   assign spi_csn_adc = spi_csn_s[1];
   assign spi_csn_clk = spi_csn_s[0];
   assign spi_sdi = spi_mosi_s;
-  assign spi_miso_s = spi_sdo | spi_fmcbk_sdo;
+  assign spi_miso_s = |({spi_sdo,spi_fmcbk_sdo} & ~spi_csn_s);
 
   // spi mirror
 
