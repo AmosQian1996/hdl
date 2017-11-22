@@ -54,6 +54,7 @@ add_connection sys_clk.clk axi_ad9694_core.s_axi_clock
 add_instance util_ad9694_cpack util_cpack
 set_instance_parameter_value util_ad9694_cpack {CHANNEL_DATA_WIDTH} $CHANNEL_DATA_WIDTH
 set_instance_parameter_value util_ad9694_cpack {NUM_OF_CHANNELS} $NUM_OF_CHANNELS
+set_instance_parameter_value util_ad9694_cpack {SAMPLE_WIDTH} $SAMPLE_RESOLUTION
 
 add_connection sys_clk.clk_reset util_ad9694_cpack.if_adc_rst
 add_connection ad9694_jesd204.link_clk util_ad9694_cpack.if_adc_clk
