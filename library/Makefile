@@ -28,7 +28,6 @@ clean:
 	make -C axi_ad9671 clean
 	make -C axi_ad9680 clean
 	make -C axi_ad9684 clean
-	make -C axi_ad9694 clean
 	make -C axi_ad9739a clean
 	make -C axi_ad9963 clean
 	make -C axi_adc_decimate clean
@@ -124,7 +123,6 @@ lib:
 	make -C axi_ad9671
 	make -C axi_ad9680
 	make -C axi_ad9684
-	make -C axi_ad9694
 	make -C axi_ad9739a
 	make -C axi_ad9963
 	make -C axi_adc_decimate
