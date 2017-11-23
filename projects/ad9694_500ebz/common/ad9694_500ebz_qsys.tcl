@@ -4,7 +4,7 @@
 set NUM_OF_CHANNELS 2
 set NUM_OF_LANES 2
 set SAMPLE_RATE_MHZ 1000.0
-set SAMPLE_RESOLUTION 8
+set ADC_RESOLUTION 8
 
 # Auto-computed parameters
 
@@ -13,6 +13,7 @@ set REFCLK_FREQUENCY_MHZ [expr $LANE_RATE_MHZ / 40]
 set CHANNEL_DATA_WIDTH [expr 32 * $NUM_OF_LANES / $NUM_OF_CHANNELS]
 set ADC_DATA_WIDTH [expr $CHANNEL_DATA_WIDTH * $NUM_OF_CHANNELS]
 set DMA_DATA_WIDTH [expr $ADC_DATA_WIDTH < 128 ? $ADC_DATA_WIDTH : 128]
+set SAMPLE_WIDTH [expr $ADC_RESOLUTION > 8 ? 16 : 8]
 
 # ad9694-xcvr
 
@@ -39,7 +40,7 @@ set_interface_property rx_sync EXPORT_OF ad9694_jesd204.sync
 
 add_instance axi_ad9694_core axi_adc_jesd204
 set_instance_parameter_value axi_ad9694_core {NUM_CHANNELS} $NUM_OF_CHANNELS
-set_instance_parameter_value axi_ad9694_core {CHANNEL_WIDTH} $SAMPLE_RESOLUTION
+set_instance_parameter_value axi_ad9694_core {CHANNEL_WIDTH} $ADC_RESOLUTION
 set_instance_parameter_value axi_ad9694_core {NUM_LANES} $NUM_OF_LANES
 set_instance_parameter_value axi_ad9694_core {TWOS_COMPLEMENT} {0}
 
@@ -54,7 +55,7 @@ add_connection sys_clk.clk axi_ad9694_core.s_axi_clock
 add_instance util_ad9694_cpack util_cpack
 set_instance_parameter_value util_ad9694_cpack {CHANNEL_DATA_WIDTH} $CHANNEL_DATA_WIDTH
 set_instance_parameter_value util_ad9694_cpack {NUM_OF_CHANNELS} $NUM_OF_CHANNELS
-set_instance_parameter_value util_ad9694_cpack {SAMPLE_WIDTH} $SAMPLE_RESOLUTION
+set_instance_parameter_value util_ad9694_cpack {SAMPLE_WIDTH} $SAMPLE_WIDTH
 
 add_connection sys_clk.clk_reset util_ad9694_cpack.if_adc_rst
 add_connection ad9694_jesd204.link_clk util_ad9694_cpack.if_adc_clk
