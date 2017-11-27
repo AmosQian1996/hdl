@@ -185,7 +185,7 @@ module axi_dac_jesd204_channel #(
         .dds_data (dac_dds_data_out_s[i])
       );
 
-      assign dac_dds_data_s[(8*OCT_PER_SAMPLE)*i+:(8*OCT_PER_SAMPLE)] = dac_dds_data_out_s[i][(8*(OCT_PER_SAMPLE-1))+:(8*OCT_PER_SAMPLE)];
+      assign dac_dds_data_s[(8*OCT_PER_SAMPLE)*i+:(8*OCT_PER_SAMPLE)] = dac_dds_data_out_s[i][15-:8*OCT_PER_SAMPLE];
     end
   end
   endgenerate
